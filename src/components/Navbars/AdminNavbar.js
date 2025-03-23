@@ -1,13 +1,15 @@
-import React, { Component } from "react";
-import { useLocation } from "react-router-dom";
+import React, { Component, useEffect, useState } from "react";
+import { useLocation, useHistory } from "react-router-dom";
 import { Navbar, Container, Nav, Dropdown, Button } from "react-bootstrap";
 
 import routes from "routes.js";
 import Cookies from "js-cookie";
 
 function Header() {
+  const [leagues, setLeagues] = useState([]);
   const location = useLocation();
-  const isAuthorized = Cookies.get('isAuthorized')
+  const isAuthorized = Cookies.get('isAuthorized');
+  const history = useHistory();
   const mobileSidebarToggle = (e) => {
     e.preventDefault();
     document.documentElement.classList.toggle("nav-open");
@@ -19,7 +21,31 @@ function Header() {
     };
     document.body.appendChild(node);
   };
+
+  // upon load call get leagues
+  useEffect(() => {
+    getLeagues();
+}, []);
   
+// get the leagues to be able to load into the navbar for selection
+  const getLeagues = () => {
+    const userId = Cookies.get('id')
+    fetch(`http://localhost:8080/api/getleaguesforuser?userId=${userId}`)
+        .then((res) => res.json())
+        .then((data) => {
+          setLeagues(data);
+        })
+        .catch((error) => {
+            console.error('Error fetching data ', error)
+            setLoginError(true);
+        })
+  };
+
+  const goToLeaguePage = (leagueId) => {
+    const encodedLeagueId = encodeURIComponent(leagueId);
+    history.push(`/admin/leaguepage?leagueId=${encodedLeagueId}`)
+  }
+
   // removes the cookies to log out the user
   const handleLogOut = () => {
     Cookies.remove('email');
@@ -56,7 +82,7 @@ function Header() {
               <Nav.Link
                 className="m-0"
                 href="#pablo"
-                onClick={(e) => e.preventDefault()}
+                onClick={() => (isAuthorized ? window.location.href = "/admin/createleague" : (window.location.href = "/admin/login"))}
               >
                 <span className="no-icon">Start A League</span>
               </Nav.Link>
@@ -74,12 +100,15 @@ function Header() {
                 <span className="no-icon">Leagues</span>
               </Dropdown.Toggle>
               <Dropdown.Menu aria-labelledby="navbarDropdownMenuLink">
-                <Dropdown.Item
-                  href="#pablo"
-                  onClick={(e) => e.preventDefault()}
-                >
-                  League
-                </Dropdown.Item>
+              {leagues.map((league) => (
+              <Dropdown.Item
+              key={league.leagueId}
+              onClick={() => goToLeaguePage(league.leagueId)}
+              value={league.leagueId}
+              >
+              {league.leagueName}
+              </Dropdown.Item>
+              ))}
               </Dropdown.Menu>
             </Dropdown>
             <Dropdown as={Nav.Item}>
@@ -97,7 +126,7 @@ function Header() {
               <Dropdown.Menu aria-labelledby="navbarDropdownMenuLink">
                 <Dropdown.Item
                   href="#pablo"
-                  onClick={(e) => e.preventDefault()}
+                  onClick={() => window.location.href = "/admin/createleague"}
                 >
                   Team
                 </Dropdown.Item>

@@ -9,6 +9,11 @@ import Notifications from "views/Notifications.js";
 import Upgrade from "views/Upgrade.js";
 import Login from "views/Login";
 import Register from "views/Register";
+import CreateLeague from "views/CreateLeague";
+import LeagueSettings from "views/LeagueSettings";
+import LeaguePage from "views/LeaguePage";
+import EditLeagueSettings from "views/EditLeagueSettings";
+import JoinLeagueLogin from "views/JoinLeagueLogin";
 
 const dashboardRoutes = [
   {
@@ -24,6 +29,41 @@ const dashboardRoutes = [
     name: "Dashboard",
     icon: "nc-icon nc-chart-pie-35",
     component: Dashboard,
+    layout: "/admin"
+  },
+  {
+    path: "/createleague",
+    name: "Create League",
+    icon: "nc-icon nc-chart-pie-35",
+    component: CreateLeague,
+    layout: "/admin"
+  },
+  {
+    path: "/joinleague",
+    name: "Join League",
+    icon: "nc-icon nc-chart-pie-35",
+    component: JoinLeagueLogin,
+    layout: "/admin"
+  },
+  {
+    path: "/editleaguesettings",
+    name: "Edit League Settings",
+    icon: "nc-icon nc-chart-pie-35",
+    component: EditLeagueSettings,
+    layout: "/admin"
+  },
+  {
+    path: "/leaguepage",
+    name: "League Page",
+    icon: "nc-icon nc-chart-pie-35",
+    component: LeaguePage,
+    layout: "/admin"
+  },
+  {
+    path: "/leaguesettings",
+    name: "League Settings",
+    icon: "nc-icon nc-chart-pie-35",
+    component: LeagueSettings,
     layout: "/admin"
   },
   {

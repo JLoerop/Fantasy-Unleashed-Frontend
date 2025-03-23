@@ -8,11 +8,16 @@ import {
   } from "react-bootstrap";
 import { CardBody } from 'reactstrap';
 import Cookies from 'js-cookie';
+import {useHistory} from "react-router-dom";
 
-const Login = () => {
+const JoinLeagueLogin = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loginError, setLoginError] = useState(false);
+  const queryParams = new URLSearchParams(location.search);
+  const history = useHistory();
+  const leagueId = queryParams.get("leagueId");
+
 
     // handles the submission of the login form and calls the backend to login the user
   const handleSubmit = (e) => {
@@ -20,18 +25,40 @@ const Login = () => {
     fetch(`http://localhost:8080/api/login?email=${email}&password=${password}`)
     .then((res) => res.json())
     .then((data) => {
-        console.log(data);
         Cookies.set('isAuthorized', true, {expires: 7});
         Cookies.set('email', data.email, {expires: 7});
         Cookies.set('id', data.userId, {expires: 7});
 
-        window.location.href = "/admin/dashboard";
+        joinLeague();       
     })
     .catch((error) => {
         console.error('Error fetching data ', error)
         setLoginError(true);
     })
   };
+
+  // after logging in the user then it calls the backend to add the user to the league
+  const joinLeague = () => {
+                fetch(`http://localhost:8080/api/joinleague?leagueId=${leagueId}&email=${email}&password=${password}`, {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json',
+                  },
+                })
+                .then((res) => {
+                  if (!res.ok) {
+                    return res.text().then((errorMessage) => { throw new Error(errorMessage); });
+                  }
+                  return res.json();
+                })
+                .then((data) => {
+                    history.push(`/admin/leaguepage?leagueId=${leagueId}`)
+                })
+                .catch((error) => {
+                    console.error('Error fetching data ', error)
+                    setError(true);
+                })
+  }
 
   return (
     <Row className="justify-content-center">
@@ -85,4 +112,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default JoinLeagueLogin;
