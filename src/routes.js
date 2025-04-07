@@ -14,6 +14,8 @@ import LeagueSettings from "views/LeagueSettings";
 import LeaguePage from "views/LeaguePage";
 import EditLeagueSettings from "views/EditLeagueSettings";
 import JoinLeagueLogin from "views/JoinLeagueLogin";
+import CreateTeam from "views/CreateTeam";
+import CreateLineups from "views/CreateLineups";
 
 const dashboardRoutes = [
   {
@@ -43,6 +45,20 @@ const dashboardRoutes = [
     name: "Join League",
     icon: "nc-icon nc-chart-pie-35",
     component: JoinLeagueLogin,
+    layout: "/admin"
+  },
+  {
+    path: "/createlineups",
+    name: "Create Lineups",
+    icon: "nc-icon nc-chart-pie-35",
+    component: CreateLineups,
+    layout: "/admin"
+  },
+  {
+    path: "/createteam",
+    name: "Create Team",
+    icon: "nc-icon nc-chart-pie-35",
+    component: CreateTeam,
     layout: "/admin"
   },
   {

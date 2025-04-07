@@ -37,7 +37,6 @@ function Header() {
         })
         .catch((error) => {
             console.error('Error fetching data ', error)
-            setLoginError(true);
         })
   };
 
@@ -53,7 +52,7 @@ function Header() {
   }
 
   return (
-    <Navbar bg="light" expand="lg">
+    <Navbar bg="dark" expand="lg">
       <Container fluid>
         <div className="d-flex justify-content-center align-items-center ml-2 ml-lg-0">
           <Button
@@ -99,6 +98,7 @@ function Header() {
               >
                 <span className="no-icon">Leagues</span>
               </Dropdown.Toggle>
+              {leagues.length > 0 && (
               <Dropdown.Menu aria-labelledby="navbarDropdownMenuLink">
               {leagues.map((league) => (
               <Dropdown.Item
@@ -106,10 +106,11 @@ function Header() {
               onClick={() => goToLeaguePage(league.leagueId)}
               value={league.leagueId}
               >
-              {league.leagueName}
-              </Dropdown.Item>
-              ))}
-              </Dropdown.Menu>
+          {league.leagueName}
+      </Dropdown.Item>
+    ))}
+  </Dropdown.Menu>
+)}
             </Dropdown>
             <Dropdown as={Nav.Item}>
               <Dropdown.Toggle

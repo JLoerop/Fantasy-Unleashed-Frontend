@@ -14,6 +14,7 @@ const JoinLeagueLogin = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loginError, setLoginError] = useState(false);
+  const [joinError, setJoinError] = useState(false);
   const queryParams = new URLSearchParams(location.search);
   const history = useHistory();
   const leagueId = queryParams.get("leagueId");
@@ -56,7 +57,7 @@ const JoinLeagueLogin = () => {
                 })
                 .catch((error) => {
                     console.error('Error fetching data ', error)
-                    setError(true);
+                    setJoinError(true);
                 })
   }
 
@@ -67,6 +68,7 @@ const JoinLeagueLogin = () => {
             <Card.Header className="d-flex flex-column align-items-center text-center">
                 <Card.Title as="h4">Welcome Back!</Card.Title>
                 {loginError && <p className="text-danger mt-2">Password or Email are Incorrect</p>}
+                {joinError && <p className="text-danger mt-2">League is Full</p>}
               </Card.Header>
               <CardBody className="d-flex flex-column align-items-center text-center">
               <Form onSubmit={handleSubmit} className="w-50">

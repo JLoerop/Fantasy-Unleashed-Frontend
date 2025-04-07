@@ -45,6 +45,7 @@ const Register = () => {
         console.log(data);
         Cookies.set('isAuthorized', true, {expires: 7});
         Cookies.set('email', data.email, {expires: 7});
+        Cookies.set('id', data.userId, {expires: 7});
 
         window.location.href = "/admin/dashboard";
     })
