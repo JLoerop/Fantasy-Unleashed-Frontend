@@ -7,6 +7,7 @@ import Cookies from "js-cookie";
 
 function Header() {
   const [leagues, setLeagues] = useState([]);
+  const [teams, setTeams] = useState([]);
   const location = useLocation();
   const isAuthorized = Cookies.get('isAuthorized');
   const history = useHistory();
@@ -25,6 +26,7 @@ function Header() {
   // upon load call get leagues
   useEffect(() => {
     getLeagues();
+    getTeams();
 }, []);
   
 // get the leagues to be able to load into the navbar for selection
@@ -40,15 +42,35 @@ function Header() {
         })
   };
 
+  // get the teams to be able to load into the navbar for selection
+  const getTeams = () => {
+    const userId = Cookies.get('id')
+    fetch(`http://localhost:8080/api/getteamsforuser?userId=${userId}`)
+        .then((res) => res.json())
+        .then((data) => {
+          setTeams(data);
+        })
+        .catch((error) => {
+            console.error('Error fetching data ', error)
+        })
+  };
+
   const goToLeaguePage = (leagueId) => {
     const encodedLeagueId = encodeURIComponent(leagueId);
     history.push(`/admin/leaguepage?leagueId=${encodedLeagueId}`)
+  }
+
+  const goToTeamPage = (teamId) => {
+    const encodedTeamId = encodeURIComponent(teamId);
+    history.push(`/admin/teampage?teamId=${encodedTeamId}`)
   }
 
   // removes the cookies to log out the user
   const handleLogOut = () => {
     Cookies.remove('email');
     Cookies.remove('isAuthorized');
+    Cookies.remove('id');
+    window.location.href = "/admin/dashboard";
   }
 
   return (
@@ -123,15 +145,20 @@ function Header() {
                 className="m-0"
               >
                 <span className="no-icon">Teams</span>
-              </Dropdown.Toggle>
+                </Dropdown.Toggle>
+              {teams.length > 0 && (
               <Dropdown.Menu aria-labelledby="navbarDropdownMenuLink">
-                <Dropdown.Item
-                  href="#pablo"
-                  onClick={() => window.location.href = "/admin/createleague"}
-                >
-                  Team
-                </Dropdown.Item>
+              {teams.map((team) => (
+              <Dropdown.Item
+              key={team.teamId}
+              onClick={() => goToTeamPage(team.teamId)}
+              value={team.teamId}
+              >
+          {team.teamName}
+      </Dropdown.Item>
+    ))}
               </Dropdown.Menu>
+              )}
             </Dropdown>
             <Nav.Item>
               <Nav.Link

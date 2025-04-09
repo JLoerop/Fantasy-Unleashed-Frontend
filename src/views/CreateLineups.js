@@ -42,6 +42,32 @@ const CreateLineups = () => {
         })
     }
 
+    const deleteSelectedPlayer = (selectedPlayer) => {
+        const data = {
+          playerId: selectedPlayer,
+          teamId: teams.teamId,
+        }
+        fetch(`http://localhost:8080/api/deleteplayer`, {
+              method: 'DELETE',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(data),
+            })
+            .then((res) => {
+              if (!res.ok) {
+                return res.text().then((errorMessage) => { throw new Error(errorMessage); });
+              }
+              return res.json();
+            })
+            .then((data) => {
+                window.location.reload();
+            })
+            .catch((error) => {
+                console.error('Error fetching data ', error)
+            })
+      }
+
     const getTeams = () => {
         fetch(`http://localhost:8080/api/getteamsinleague?leagueId=${leagueId}`)
         .then((res) => res.json())
@@ -92,6 +118,9 @@ const CreateLineups = () => {
             <td className="text-left">{player.name}</td>
             <td className="text-left">{player.position}</td>
             <td className="text-left">{player.team}</td>
+            <td className="text-left">
+                <Button variant="warning" onClick={() => {deleteSelectedPlayer(player.playerId); getTeams();}}>Delete</Button>
+            </td>
         </tr>
     })
 
@@ -146,6 +175,7 @@ const CreateLineups = () => {
                       <th className="border-0">Name</th>
                       <th className="border-0">Position</th>
                       <th className="border-0">Team</th>
+                      <th className="border-0">Delete</th>
                     </tr>
                   </thead>
                   <tbody>

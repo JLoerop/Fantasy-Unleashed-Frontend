@@ -16,6 +16,8 @@ import EditLeagueSettings from "views/EditLeagueSettings";
 import JoinLeagueLogin from "views/JoinLeagueLogin";
 import CreateTeam from "views/CreateTeam";
 import CreateLineups from "views/CreateLineups";
+import TeamPage from "views/TeamPage";
+import MatchPage from "views/MatchPage";
 
 const dashboardRoutes = [
   {
@@ -108,6 +110,20 @@ const dashboardRoutes = [
     name: "Table List",
     icon: "nc-icon nc-notes",
     component: TableList,
+    layout: "/admin"
+  },
+  {
+    path: "/teampage",
+    name: "Team Page",
+    icon: "nc-icon nc-notes",
+    component: TeamPage,
+    layout: "/admin"
+  },
+  {
+    path: "/matchpage",
+    name: "Match Page",
+    icon: "nc-icon nc-notes",
+    component: MatchPage,
     layout: "/admin"
   },
   {
