@@ -30,6 +30,7 @@ const TeamPage = () => {
         getPlayerScores();
     }, [teamId]);
 
+    // calls the backend to get all of the teams data
     const getTeam = () => {
       fetch(`http://localhost:8080/api/getteambyteamid?teamId=${teamId}`)
       .then((res) => res.json())
@@ -41,6 +42,7 @@ const TeamPage = () => {
       })
   }
 
+  // calls the backend to get the match the team is currently in
   const getMatch = () => {
     fetch(`http://localhost:8080/api/getmatch?teamId=${teamId}&week=${17}`)
     .then((res) => res.json())
@@ -52,6 +54,7 @@ const TeamPage = () => {
     })
 }
 
+   // calls the backend to get all of the players scores that belong to that team
     const getPlayerScores = () => {
     fetch(`http://localhost:8080/api/getplayerscores?teamId=${teamId}`)
     .then((res) => res.json())
@@ -63,6 +66,8 @@ const TeamPage = () => {
     })
     }
 
+    // calls the backend to move a player by first checking to see if only the first player has been selected and then once two have been selected
+    // then it sets the json body and calls the backend and the reloads the page to display the change while also resetting the selected players
 const moveSelectedPlayer = (playerId) => {
     if (selectedPlayerId === null) {
         setSelectedPlayerId(playerId);
@@ -97,6 +102,7 @@ const moveSelectedPlayer = (playerId) => {
       }
 }
 
+  // sets the url to have the match id and sends the user to the match page
     const viewMatchPage = (matchId) => {
         const encodedMatchId = encodeURIComponent(matchId);
         history.push(`/admin/matchpage?matchId=${encodedMatchId}`)
@@ -120,6 +126,7 @@ const playersTable = team.rosters ? Object.entries(team.rosters).filter(([positi
 }) : null;
 
     return(
+      <>
     <Container fluid>
         <Row>
           <Col md="12">
@@ -187,6 +194,7 @@ const playersTable = team.rosters ? Object.entries(team.rosters).filter(([positi
                   </Col>
                   </Row>
     </Container>
+    </>
     );
 };
 export default TeamPage;

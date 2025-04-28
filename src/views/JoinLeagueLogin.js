@@ -40,7 +40,7 @@ const JoinLeagueLogin = () => {
 
   // after logging in the user then it calls the backend to add the user to the league
   const joinLeague = () => {
-                fetch(`http://localhost:8080/api/joinleague?leagueId=${leagueId}&email=${email}&password=${password}`, {
+                fetch(`http://localhost:8080/api/joinleague?leagueId=${leagueId}&email=${email}`, {
                   method: 'POST',
                   headers: {
                     'Content-Type': 'application/json',
@@ -67,7 +67,7 @@ const JoinLeagueLogin = () => {
     <Card className="card-stats">
             <Card.Header className="d-flex flex-column align-items-center text-center">
                 <Card.Title as="h4">Welcome Back!</Card.Title>
-                {loginError && <p className="text-danger mt-2">Password or Email are Incorrect</p>}
+                {loginError && <p className="text-danger mt-2">Email is Incorrect</p>}
                 {joinError && <p className="text-danger mt-2">League is Full</p>}
               </Card.Header>
               <CardBody className="d-flex flex-column align-items-center text-center">

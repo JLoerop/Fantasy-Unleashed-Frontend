@@ -8,6 +8,7 @@ const TeamModal = ({ show, onClose, teams, player}) => {
     const [selectedPlayer, setSelectedPlayer] = useState(0)
     const [teamId, setTeamId] = useState(0);
 
+    // when the team is selected the the roster player and teamid is set and the new modal is shown 
     const viewRoster = (selectedRoster, playerId, teamId) => {
         setRoster(selectedRoster);
         setSelectedPlayer(playerId);

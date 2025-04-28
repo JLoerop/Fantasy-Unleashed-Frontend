@@ -21,11 +21,12 @@ const MatchPage = () => {
     const [homeScores, setHomeScores] = useState([]);
     const [awayScores, setAwayScores] = useState([]);
 
-
+    // when the match id is found it will call get match
     useEffect(() => {
         getMatch();
     }, [matchId]);
 
+    // calls the backend to get the data for the matchup
     const getMatch = () => {
         fetch(`http://localhost:8080/api/getmatchbyid?matchId=${matchId}`)
         .then((res) => res.json())
@@ -39,6 +40,7 @@ const MatchPage = () => {
         })
     }
 
+    // calls the backend to get the home teams score
     const getPlayerScoresHome = (teamId) => {
         fetch(`http://localhost:8080/api/getplayerscores?teamId=${teamId}`)
         .then((res) => res.json())
@@ -50,6 +52,7 @@ const MatchPage = () => {
         })
         }
 
+        // calls the backend to get the away teams score
         const getPlayerScoresAway = (teamId) => {
             fetch(`http://localhost:8080/api/getplayerscores?teamId=${teamId}`)
             .then((res) => res.json())
@@ -61,6 +64,7 @@ const MatchPage = () => {
             })
             }
 
+            // dynamic table that maps and filters the data using the home team roster including the players scores and fills in the data using the json response
     const homeTable = match?.homeTeam?.rosters ? Object.entries(match.homeTeam.rosters).filter(([position]) => position !== 'rosterId').map(([position, player], index) => {
         const playerScore = homeScores.find(score => score && score.player && score.player.playerId === player.playerId);
         const fantasyPoints = playerScore ? playerScore.fantasyPoints : 0;
@@ -75,6 +79,7 @@ const MatchPage = () => {
         );
     }) : null;
 
+    // dynamic table that maps and filters the data using the away team roster including the players scores and fills in the data using the json response
     const awayTable = match?.awayTeam?.rosters ? Object.entries(match.awayTeam.rosters).filter(([position]) => position !== 'rosterId').map(([position, player], index) => {
         const playerScore = awayScores.find(score => score && score.player && score.player.playerId === player.playerId);
         const fantasyPoints = playerScore ? playerScore.fantasyPoints : 0;

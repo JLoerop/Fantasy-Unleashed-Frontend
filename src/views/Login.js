@@ -18,7 +18,13 @@ const Login = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     fetch(`http://localhost:8080/api/login?email=${email}&password=${password}`)
-    .then((res) => res.json())
+    .then((res) => {
+      if (!res.ok) {
+        setLoginError(true);
+        throw new Error('Login failed');
+      }
+      return res.json();
+    })
     .then((data) => {
         console.log(data);
         Cookies.set('isAuthorized', true, {expires: 7});

@@ -26,11 +26,13 @@ const CreateLineups = () => {
     const [showTeamModal, setShowTeamModal] = useState(false);
 
 
+    // when league id is updated then call get player and get placed players
     useEffect(() => {
         getPlayers();
         getPlacedPlayers();
     }, [leagueId]);
 
+    // calls the backend to get the player list and sets the list to players
     const getPlayers = () => {
         fetch(`http://localhost:8080/api/getplayerlist?leagueId=${leagueId}`)
         .then((res) => res.json())
@@ -42,6 +44,7 @@ const CreateLineups = () => {
         })
     }
 
+    // creates a json body for sending the post request that removes the player from the database upon calling it it refreshes the page to show the difference
     const deleteSelectedPlayer = (selectedPlayer) => {
         const data = {
           playerId: selectedPlayer,
@@ -68,6 +71,7 @@ const CreateLineups = () => {
             })
       }
 
+      // calls the backend to get a list of the teams in the league and then displays the modal pop up
     const getTeams = () => {
         fetch(`http://localhost:8080/api/getteamsinleague?leagueId=${leagueId}`)
         .then((res) => res.json())
@@ -80,6 +84,7 @@ const CreateLineups = () => {
         })
     }
 
+    // calls backend to get a list of all of the players that have been placed already and sets placed players with the data
     const getPlacedPlayers = () => {
         fetch(`http://localhost:8080/api/getplayersplaced?leagueId=${leagueId}`)
         .then((res) => res.json())
@@ -91,14 +96,17 @@ const CreateLineups = () => {
         })
     }
 
+    // filters the players based on the search box
     const filteredPlayers = players.filter(player =>
         player.name.toLowerCase().includes(searchTerm.toLowerCase())
       );
 
+      // filters the players based on the search box
       const filteredPlacedPlayers = placedPlayers.filter(player =>
         player.name.toLowerCase().includes(searchTerm2.toLowerCase())
       );
 
+      // dynamic table that is created by mapping the json response from the backend and sets the data to the parts of the table
     const playersTable = filteredPlayers.map((player, index) => {
         return <tr key={index}>
             <td className="text-left">
@@ -110,6 +118,7 @@ const CreateLineups = () => {
         </tr>
     })
 
+     // dynamic table that is created by mapping the json response from the backend and sets the data to the parts of the table
     const playersPlacedTable = filteredPlacedPlayers.map((player, index) => {
         return <tr key={index}>
             <td className="text-left">

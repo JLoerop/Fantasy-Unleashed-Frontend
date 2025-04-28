@@ -25,6 +25,7 @@ function Dashboard() {
 
 const [teamScores, setTeamScores] = useState([]);
 
+// calls the backend to get all of the scores that belong to the logged in user and what week it is
   const getTeamScores = () => {
     const userId = Cookies.get('id')
     fetch(`http://localhost:8080/api/getmatchesforuser?userId=${userId}&week=${17}`)
@@ -37,6 +38,7 @@ const [teamScores, setTeamScores] = useState([]);
     })
 }
 
+// on load call get team scores
 useEffect(() => {
         getTeamScores();
     }, []);

@@ -2,6 +2,8 @@ import React from "react";
 import { Modal, Button, Table } from "react-bootstrap";
 
 const RostersModal = ({ show, onClose, roster, selectedPlayer, teamId}) => {
+  // when the player that is selected it placed it creates the json body for the request and calls the backend to save it and finally closes
+  // and refreshes the page to show the effect
   const placePlayer = () => {
     const data = {
       playerId: selectedPlayer,

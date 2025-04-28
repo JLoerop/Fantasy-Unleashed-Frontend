@@ -13,6 +13,7 @@ import Cookies from "js-cookie";
 const LeaguePage = () => {
 
     const [league, setLeague] = useState([]);
+    const [leagueMatches, setLeagueMatches] = useState([]);
     const [team, setTeam] = useState([]);
     const [commissioner, setCommissioner] = useState(false);
     const [isFull, setIsFull] = useState(false);
@@ -28,13 +29,16 @@ const LeaguePage = () => {
         getIsCommissioner();
         getTeam();
         getIsFull();
+        getMatchesByLeague();
     }, [leagueId]);
 
+    // when the create team button is pressed set the league id to the url and send the user there
     const createTeam = () => {
       const encodedLeagueId = encodeURIComponent(leagueId);
       history.push(`/admin/createteam?leagueId=${encodedLeagueId}`)
     }
 
+    // calls the backend to verify if the league is full
     const getIsFull = () => {
         fetch(`http://localhost:8080/api/validateleaguesize?leagueId=${leagueId}`)
         .then((res) => res.json())
@@ -46,6 +50,7 @@ const LeaguePage = () => {
         })
     }
 
+    // calls the backend to get the league information
     const getLeague = () => {
         fetch(`http://localhost:8080/api/getleague?leagueId=${leagueId}`)
         .then((res) => res.json())
@@ -57,6 +62,19 @@ const LeaguePage = () => {
         })
     }
 
+    // calls the backend to get the matches 
+    const getMatchesByLeague = () => {
+      fetch(`http://localhost:8080/api/getmatchesbyleagueid?leagueId=${leagueId}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setLeagueMatches(data);
+      })
+      .catch((error) => {
+          console.error('Error fetching data ', error)
+      })
+  }
+
+    // calls the backend to get the team the user has
     const getTeam = () => {
       const userId = Cookies.get('id');
       fetch(`http://localhost:8080/api/getteam?leagueId=${leagueId}&userId=${userId}`)
@@ -83,6 +101,7 @@ const LeaguePage = () => {
         })
     }
 
+    // when the create lineups button is pressed it sets the league id to the url and sends the user to the create lineup page
     const createLineups = () => {
       const encodedLeagueId = encodeURIComponent(leagueId);
       history.push(`/admin/createlineups?leagueId=${encodedLeagueId}`)
@@ -93,6 +112,55 @@ const LeaguePage = () => {
       const encodedLeagueId = encodeURIComponent(leagueId);
       history.push(`/admin/editleaguesettings?leagueId=${encodedLeagueId}`)
     }
+
+    // sets the url to have the match id and sends the user to the match page
+    const viewMatchPage = (matchId) => {
+      const encodedMatchId = encodeURIComponent(matchId);
+      history.push(`/admin/matchpage?matchId=${encodedMatchId}`)
+  }
+
+    // dynamic user match cards to be able to display all of the matches that are happening around the league by mapping each match to the card
+    // and filling the data dynamically
+    const userMatches = leagueMatches.length > 0 ? leagueMatches
+      .map((match) => (
+        <Col lg="3" sm="6" key={match.matchId}>
+      <Card className="card-stats" style={{ height: '140px' }}>
+        <CardHeader>
+          <h7>Week {match.week}</h7>
+        </CardHeader>
+        <Card.Body>
+          <Row className="align-items-center">
+            <Col xs="5">
+              <div className="text-center">
+                <h6>{match.homeTeam.teamName}</h6>
+                <p style={{ fontSize: '0.8rem' }}>Score: {match.homeScore}</p>
+              </div>
+            </Col>
+            <Col xs="2" className="text-center">
+              <div>
+                <h6>VS</h6>
+                <Button
+                  size="sm"
+                  variant="dark"
+                  onClick={() => viewMatchPage(match.matchId)}
+                  style={{ fontSize: '0.7rem', padding: '2px 6px' }}
+                >
+                  View
+                </Button>
+              </div>
+            </Col>
+            <Col xs="5">
+              <div className="text-center">
+                <h6>{match.awayTeam.teamName}</h6>
+                <p style={{ fontSize: '0.8rem' }}>Score: {match.awayScore}</p>
+              </div>
+            </Col>
+          </Row>
+        </Card.Body>
+      </Card>
+    </Col>
+  ))
+  : null;
 
     return(
     <Container fluid>
@@ -130,6 +198,9 @@ const LeaguePage = () => {
               </Card.Body>
             </Card>
           </Col>
+        </Row>
+        <Row>
+          {userMatches}
         </Row>
     </Container>
     );

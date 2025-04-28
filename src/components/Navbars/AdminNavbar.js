@@ -55,11 +55,13 @@ function Header() {
         })
   };
 
+  // when a league is clicked it will set the league id to the url and send you to that page
   const goToLeaguePage = (leagueId) => {
     const encodedLeagueId = encodeURIComponent(leagueId);
     history.push(`/admin/leaguepage?leagueId=${encodedLeagueId}`)
   }
 
+  // when a team is clicked it will set the team id to the url and send you to that page
   const goToTeamPage = (teamId) => {
     const encodedTeamId = encodeURIComponent(teamId);
     history.push(`/admin/teampage?teamId=${encodedTeamId}`)
