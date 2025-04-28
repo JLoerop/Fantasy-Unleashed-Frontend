@@ -121,8 +121,7 @@ const LeaguePage = () => {
 
     // dynamic user match cards to be able to display all of the matches that are happening around the league by mapping each match to the card
     // and filling the data dynamically
-    const userMatches = leagueMatches.length > 0 ? leagueMatches
-      .map((match) => (
+    const userMatches = leagueMatches.length > 0 ? leagueMatches.filter((match) => match !== null && match !== undefined).map((match) => (
         <Col lg="3" sm="6" key={match.matchId}>
       <Card className="card-stats" style={{ height: '140px' }}>
         <CardHeader>
